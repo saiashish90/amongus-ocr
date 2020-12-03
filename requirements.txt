@@ -1,5 +1,4 @@
 opencv-python
 numpy==1.19.3
 pytesseract
-google-api-python-client
-google-cloud-firestore
+firebase-admin
