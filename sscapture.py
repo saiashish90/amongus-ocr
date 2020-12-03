@@ -25,21 +25,20 @@ for guild_id in guild_ids:
         break
     else:
         print("Pls use the $amongus command first before loading this application")
-mon = {'top': 0, 'left': 0, 'width': 310, 'height': 100}
-
 
 def record(name):
     name = name + '.mp4'
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     desired_fps = 1.0
     out = cv2.VideoWriter(name, fourcc, desired_fps,
-                          (mon['width'], mon['height']), 0)
+                          (310, 100), 0)
     last_time = 0
     status = 'discussion'
     while True:
         if time.time() - last_time > 1./desired_fps:
             img = np.array(ImageGrab.grab(bbox=(0,0,310,100)))
             img[:, :, 1] = np.zeros([img.shape[0], img.shape[1]])
+            img = cv2.bilateralFilter(img,9,75,75)
             img = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
             d = image_to_data(img, output_type=Output.DICT)
             if 'TASKS' in d['text'] and 'COMPLETE' in d['text']:
