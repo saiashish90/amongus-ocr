@@ -1,37 +1,41 @@
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
+import json
+import requests
+from google.oauth2.credentials import Credentials
+from google.cloud.firestore import Client
 import asyncio
 from pprint import pprint
-import asyncio
+
+FIREBASE_REST_API = "https://identitytoolkit.googleapis.com/v1/accounts"
 
 
-async def pepe(doc):
-    pprint((doc._reference.parent.parent.id))
+def sign_in_with_email_and_password(api_key, email, password):
+    request_url = "%s:signInWithPassword?key=%s" % (FIREBASE_REST_API, api_key)
+    headers = {"content-type": "application/json; charset=UTF-8"}
+    data = json.dumps({"email": email, "password": password,
+                       "returnSecureToken": True})
+
+    req = requests.post(request_url, headers=headers, data=data)
+    return req.json()
 
 
-def on_snapshot(doc_snapshot, changes, read_time):
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-    loop.run_until_complete(pepe(doc_snapshot[0]))
-    loop.close()
-
-
-cred = credentials.Certificate('key.json')
-firebase_admin.initialize_app(cred, {
-    'projectId': 'amongus-44241'
+user = sign_in_with_email_and_password(
+    'AIzaSyChb8Ebkbny-DLRYkqzi8feF7ej5tBLDyA', 'saiashish60@gmail.com', 'qwertyuiop')
+pprint(user)
+cred = Credentials(user['idToken'], user['refreshToken'])
+db = Client('amongus-44241', cred)
+watcher = db.collection('Mattt').document(
+    str(692784786556583946)).collection('amongus').document('stats').get().to_dict()
+pprint((watcher))
+db.collection('Mattt').document(str(692784786556583946)).collection('amongus').document('stats').update({
+    "game_state": "ok",
 })
-db = firestore.client()
-
-watcher = db.collection('Mattt').document(str(692784786556583946)).collection(
-    'amongus').document('stats').on_snapshot(on_snapshot)
-
-
-async def main():
-    await asyncio.sleep(30)
-    print(watcher)
-    watcher.unsubscribe()
-    print("done")
-    await asyncio.sleep(30)
-asyncio.run(main())
+watcher = db.collection('Mattt').document(
+    str(692784786556583946)).collection('amongus').document('stats').get().to_dict()
+pprint((watcher))
+# async def main():
+#     await asyncio.sleep(30)
+#     print(watcher)
+#     watcher.unsubscribe()
+#     print("done")
+#     await asyncio.sleep(30)
+# asyncio.run(main())

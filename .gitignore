@@ -1,1 +1,6 @@
 key.json
+roots.pem
+Video.mp4
+
+dist/sscapture.exe
+__pycache__/sscapture.cpython-37.pyc
