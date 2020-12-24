@@ -1,4 +1,4 @@
-# Amongus-ocr
+# Amongus-ocr (deprecated )
 This application uses tesseract OCR to recognize the state of among us games and allows auto muting of players in discord.
 ## Requirements
 - For using this application you need to invite Mattt bot into your discord server. (Create an issue so i can send you the invite link. The bot is currently not public.)
